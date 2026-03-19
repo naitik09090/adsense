@@ -2,14 +2,20 @@ import React, { useEffect } from "react";
 
 const AdComponent = () => {
     useEffect(() => {
-        try {
-            // Check if adsbygoogle is defined and actually push
-            if (window.adsbygoogle) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
+        const initAd = () => {
+            try {
+                if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
+                    (window.adsbygoogle = window.adsbygoogle || []).push({});
+                } else {
+                    // Script not loaded yet, retry in 500ms
+                    setTimeout(initAd, 500);
+                }
+            } catch (e) {
+                console.error("Adsense Error:", e);
             }
-        } catch (e) {
-            console.error("Adsense Error:", e);
-        }
+        };
+
+        initAd();
     }, []);
 
     return (

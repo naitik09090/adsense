@@ -73,14 +73,14 @@
 }
 
 .ad-box {
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: center;
   position: relative;
-  overflow: hidden;
   min-height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
 }
 
 .ad-label {

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import './Blog.css';
 import { blogPosts, categories } from '../data/blogData';
+import AdComponent from './AdComponent';
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -89,34 +90,46 @@ const Blog = () => {
           </div>
         )}
 
-        {/* Filtered Posts Render */}
+        {/* Regular Posts with an Ad unit injected after the 2nd post */}
         {filteredPosts
           .filter(post => searchQuery || selectedCategory !== "All" || !post.featured)
-          .map(post => (
-          <article key={post.id} className="post-card glass" onClick={() => openPost(post)} style={{ cursor: 'pointer' }}>
-            <div className="post-image-container">
-              <img src={post.image} alt={post.title} className="post-image" loading="lazy" />
-              <div className="post-badge">{post.category}</div>
-            </div>
-            <div className="post-content">
-              <div className="post-meta">
-                <span>{post.date}</span>
-                <span>•</span>
-                <span>{post.readTime}</span>
+          .map((post, index) => (
+          <React.Fragment key={post.id}>
+            <article className="post-card glass" onClick={() => openPost(post)} style={{ cursor: 'pointer' }}>
+              <div className="post-image-container">
+                <img src={post.image} alt={post.title} className="post-image" loading="lazy" />
+                <div className="post-badge">{post.category}</div>
               </div>
-              <div className="post-title">
-                <h3>{post.title}</h3>
-              </div>
-              <p className="post-excerpt">{post.excerpt}</p>
-              <div className="post-footer">
-                <div className="post-author">
-                  <div className="author-avatar" />
-                  <span className="author-name">{post.author}</span>
+              <div className="post-content">
+                <div className="post-meta">
+                  <span>{post.date}</span>
+                  <span>•</span>
+                  <span>{post.readTime}</span>
                 </div>
-                <button className="read-more-btn">Read More →</button>
+                <div className="post-title">
+                  <h3>{post.title}</h3>
+                </div>
+                <p className="post-excerpt">{post.excerpt}</p>
+                <div className="post-footer">
+                  <div className="post-author">
+                    <div className="author-avatar" />
+                    <span className="author-name">{post.author}</span>
+                  </div>
+                  <button className="read-more-btn">Read More →</button>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
+            
+            {/* In-feed Ad Unit */}
+            {index === 1 && (
+              <div className="post-card glass ad-in-feed" style={{ gridColumn: 'span 1', padding: '1rem', minHeight: '300px' }}>
+                <span className="ad-label" style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginBottom: '0.5rem', display: 'block' }}>Advertisement</span>
+                <div style={{ background: 'rgba(0,0,0,0.1)', height: '100%', borderRadius: '10px' }}>
+                  <AdComponent />
+                </div>
+              </div>
+            )}
+          </React.Fragment>
         ))}
         
         {filteredPosts.length === 0 && (

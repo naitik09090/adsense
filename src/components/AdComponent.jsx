@@ -4,15 +4,15 @@ const AdComponent = () => {
     useEffect(() => {
         const initAd = () => {
             try {
-                if (window.adsbygoogle && typeof window.adsbygoogle.push === 'function') {
+                if (window.adsbygoogle) {
                     (window.adsbygoogle = window.adsbygoogle || []).push({});
                 } else {
-                    // Script not loaded yet, retry in 500ms
-                    setTimeout(initAd, 500);
+                    console.warn("AdSense is being BLOCKED by your browser or an extension.");
                 }
             } catch (e) {
                 console.error("Adsense Error:", e);
             }
+
         };
 
         initAd();

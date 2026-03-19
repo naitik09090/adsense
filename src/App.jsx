@@ -16,18 +16,18 @@ function App() {
         </div>
       </nav>
 
-      <main id="blog">
-        <Blog />
-      </main>
-
-      <section id="ads" className="ad-section">
-        <div className="container">
-          <div className="ad-box glass">
-            <span className="ad-label">Sponsored</span>
+      <section className="billboard-ad">
+        <div className="container" style={{ paddingTop: '6rem' }}>
+          <div className="glass" style={{ padding: '1rem', textAlign: 'center' }}>
+            <span className="ad-label" style={{ fontSize: '0.6rem', color: 'var(--text-dim)', textAlign: 'left', display: 'block' }}>Sponsored Message</span>
             <AdComponent />
           </div>
         </div>
       </section>
+
+      <main id="blog">
+        <Blog />
+      </main>
 
       <footer className="glass">
         <div className="container footer-content">

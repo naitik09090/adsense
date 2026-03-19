@@ -12,8 +12,8 @@ const Blog = () => {
   const filteredPosts = useMemo(() => {
     return blogPosts.filter(post => {
       const matchesCategory = selectedCategory === "All" || post.category === selectedCategory;
-      const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                             post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
   }, [selectedCategory, searchQuery]);
@@ -40,9 +40,9 @@ const Blog = () => {
       </header>
 
       <div className="search-container">
-        <input 
-          type="text" 
-          placeholder="Search articles..." 
+        <input
+          type="text"
+          placeholder="Search articles..."
           className="search-input glass"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -51,8 +51,8 @@ const Blog = () => {
 
       <nav className="filter-bar">
         {categories.map(cat => (
-          <button 
-            key={cat} 
+          <button
+            key={cat}
             className={`filter-btn ${selectedCategory === cat ? 'active' : ''}`}
             onClick={() => setSelectedCategory(cat)}
           >
@@ -90,12 +90,11 @@ const Blog = () => {
           </div>
         )}
 
-        {/* Regular Posts with an Ad unit injected after the 2nd post */}
+        {/* Regular Posts Only (In-feed ads removed) */}
         {filteredPosts
           .filter(post => searchQuery || selectedCategory !== "All" || !post.featured)
-          .map((post, index) => (
-          <React.Fragment key={post.id}>
-            <article className="post-card glass" onClick={() => openPost(post)} style={{ cursor: 'pointer' }}>
+          .map(post => (
+            <article key={post.id} className="post-card glass" onClick={() => openPost(post)} style={{ cursor: 'pointer' }}>
               <div className="post-image-container">
                 <img src={post.image} alt={post.title} className="post-image" loading="lazy" />
                 <div className="post-badge">{post.category}</div>
@@ -119,19 +118,8 @@ const Blog = () => {
                 </div>
               </div>
             </article>
-            
-            {/* In-feed Ad Unit */}
-            {index === 1 && (
-              <div className="post-card glass ad-in-feed" style={{ gridColumn: 'span 1', padding: '1rem', minHeight: '300px' }}>
-                <span className="ad-label" style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginBottom: '0.5rem', display: 'block' }}>Advertisement</span>
-                <div style={{ background: 'rgba(0,0,0,0.1)', height: '100%', borderRadius: '10px' }}>
-                  <AdComponent />
-                </div>
-              </div>
-            )}
-          </React.Fragment>
-        ))}
-        
+          ))}
+
         {filteredPosts.length === 0 && (
           <div className="no-posts" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem' }}>
             <p>No articles found matching your criteria.</p>
@@ -139,7 +127,7 @@ const Blog = () => {
         )}
       </div>
 
-      {/* Full Post Modal */}
+      {/* Full Post Modal (Modal ad removed) */}
       {selectedPost && (
         <div className="modal-overlay" onClick={closePost}>
           <div className="modal-content glass" onClick={e => e.stopPropagation()}>

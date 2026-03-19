@@ -90,34 +90,46 @@ const Blog = () => {
           </div>
         )}
 
-        {/* Regular Posts Only (In-feed ads removed) */}
+        {/* Regular Posts with Multiple In-feed Ad Units */}
         {filteredPosts
           .filter(post => searchQuery || selectedCategory !== "All" || !post.featured)
-          .map(post => (
-            <article key={post.id} className="post-card glass" onClick={() => openPost(post)} style={{ cursor: 'pointer' }}>
-              <div className="post-image-container">
-                <img src={post.image} alt={post.title} className="post-image" loading="lazy" />
-                <div className="post-badge">{post.category}</div>
-              </div>
-              <div className="post-content">
-                <div className="post-meta">
-                  <span>{post.date}</span>
-                  <span>•</span>
-                  <span>{post.readTime}</span>
+          .map((post, index) => (
+            <React.Fragment key={post.id}>
+              <article className="post-card glass" onClick={() => openPost(post)} style={{ cursor: 'pointer' }}>
+                <div className="post-image-container">
+                  <img src={post.image} alt={post.title} className="post-image" loading="lazy" />
+                  <div className="post-badge">{post.category}</div>
                 </div>
-                <div className="post-title">
-                  <h3>{post.title}</h3>
-                </div>
-                <p className="post-excerpt">{post.excerpt}</p>
-                <div className="post-footer">
-                  <div className="post-author">
-                    <div className="author-avatar" />
-                    <span className="author-name">{post.author}</span>
+                <div className="post-content">
+                  <div className="post-meta">
+                    <span>{post.date}</span>
+                    <span>•</span>
+                    <span>{post.readTime}</span>
                   </div>
-                  <button className="read-more-btn">Read More →</button>
+                  <div className="post-title">
+                    <h3>{post.title}</h3>
+                  </div>
+                  <p className="post-excerpt">{post.excerpt}</p>
+                  <div className="post-footer">
+                    <div className="post-author">
+                      <div className="author-avatar" />
+                      <span className="author-name">{post.author}</span>
+                    </div>
+                    <button className="read-more-btn">Read More →</button>
+                  </div>
                 </div>
-              </div>
-            </article>
+              </article>
+
+              {/* Ad Unit injected after every 3 posts (index 0, 3, 6...) */}
+              {(index + 1) % 2 === 0 && (
+                <div className="post-card glass ad-in-feed" style={{ gridColumn: 'span 1', padding: '1rem', minHeight: '300px' }}>
+                  <span className="ad-label" style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginBottom: '0.5rem', display: 'block' }}>Advertisement</span>
+                  <div style={{ background: 'rgba(0,0,0,0.1)', height: '100%', borderRadius: '10px' }}>
+                    <AdComponent />
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
           ))}
 
         {filteredPosts.length === 0 && (
@@ -127,7 +139,7 @@ const Blog = () => {
         )}
       </div>
 
-      {/* Full Post Modal (Modal ad removed) */}
+      {/* Full Post Modal */}
       {selectedPost && (
         <div className="modal-overlay" onClick={closePost}>
           <div className="modal-content glass" onClick={e => e.stopPropagation()}>
@@ -151,7 +163,14 @@ const Blog = () => {
               </div>
               <div className="post-full-content">
                 <p>{selectedPost.excerpt}</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+
+                {/* Ad inside the article content */}
+                <div className="modal-ad-box" style={{ margin: '2rem 0', padding: '1.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: '1rem' }}>
+                  <span className="ad-label" style={{ fontSize: '0.6rem', color: 'var(--text-dim)', marginBottom: '0.5rem', display: 'block' }}>Advertisement</span>
+                  <AdComponent />
+                </div>
+
                 <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed pretium diam sem ut ipsum. Ut varius tincidunt libero.</p>
               </div>
             </div>
